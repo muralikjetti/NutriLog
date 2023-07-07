@@ -6,3 +6,4 @@ app = Flask(__name__)
 def hello_world():
     if request.method == 'GET':
         return render_template('login.html')
+
