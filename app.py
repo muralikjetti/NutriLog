@@ -1,9 +1,7 @@
-from flask import Flask, render_template, request, session
+from flask import render_template, request, session
+from website import create_app
 
-app = Flask(__name__)
+app = create_app()
 
-@app.route("/", methods=['POST', 'GET'])
-def hello_world():
-    if request.method == 'GET':
-        return render_template('login.html')
-
+if __name__ == '__main__':
+    app.run(debug=True)
