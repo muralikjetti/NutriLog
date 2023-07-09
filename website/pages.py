@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import login_required, current_user
 from .helpers import get_nutrition_info
 from .database import db, Food
-from datetime import datetime
+from datetime import datetime, date
 
 pages = Blueprint('pages', __name__)
 
@@ -93,15 +93,14 @@ def foodLog():
         
 
         selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+
         foods = Food.query.filter_by(user_id=current_user.id, date=selected_date).all()
         formatted_date = selected_date.strftime('%B %d, %Y')
         
-        total_calories = sum(food.calories for food in foods)
-        total_fat = sum(food.fat for food in foods)
-        total_protein = sum(food.protein for food in foods)
-        total_carbs = sum(food.carbs for food in foods)
-
-
+        total_calories = round(sum(food.calories for food in foods), 2)
+        total_fat = round(sum(food.fat for food in foods), 2)
+        total_protein = round(sum(food.protein for food in foods), 2)
+        total_carbs = round(sum(food.carbs for food in foods), 2)
         
         return render_template("diary.html", foods=foods, formatted_date=formatted_date, total_calories=total_calories, total_protein=total_protein, total_carbs=total_carbs, total_fat=total_fat)
 
