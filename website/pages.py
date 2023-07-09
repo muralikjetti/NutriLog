@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import login_required, current_user
 from .helpers import get_nutrition_info
 from .database import db, Food
-from datetime import datetime
+from datetime import datetime, date
 
 pages = Blueprint('pages', __name__)
 
@@ -105,4 +105,17 @@ def foodLog():
         return render_template("diary.html", foods=foods, formatted_date=formatted_date, total_calories=total_calories, total_protein=total_protein, total_carbs=total_carbs, total_fat=total_fat)
 
     return redirect(url_for('pages.food'))
+
+@pages.route("/removeFromFoodLog/<int:food_id>", methods=['POST'])
+@login_required
+def removeFromFoodLog(food_id):
+    food = Food.query.get(food_id)
+    if food:
+        db.session.delete(food)
+        db.session.commit()
+        flash('Food entry removed successfully!', category='success')
+    else:
+        flash('Food entry not found', category='error')
+
+    return redirect(url_for('pages.diary'))
 
