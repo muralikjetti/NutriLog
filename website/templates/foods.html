@@ -1,2 +1,56 @@
 {% extends "layout.html" %}
-{% block title %}Foods{% endblock %}
+{% block title %} Foods {% endblock %}
+{% block page %}
+<div class="container">
+    <h1 id="food_search">Food Search</h1>
+    <div class="row">
+        <form id="food-search-form" class="row" action="{{ url_for('pages.foods') }}" method="POST">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <input type="number" id="search-input" name="quantity" type="text" class="form-control m-3 opacity-50" placeholder="Quantity">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <input id="search-input" name="food" type="text" class="form-control m-3 opacity-50" placeholder="Food">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button id="search-button" class="btn btn-warning m-3">Search</button>
+            </div>
+        </form>
+    </div>
+    <table id="food-table" class="table table-bordered opacity-50">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Energy (kcal)</th>
+                <th>Fat (grams)</th>
+                <th>Protein (grams)</th>
+                <th>Carbohydrate (grams)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if nutrition_info %}
+                <tr>
+                    <td>{{ nutrition_info.name }}</td>
+                    <td>{{ nutrition_info.energy }}</td>
+                    <td>{{ nutrition_info.fat }}</td>
+                    <td>{{ nutrition_info.protein }}</td>
+                    <td>{{ nutrition_info.carbohydrates }}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <form id="add-to-diary-form" action="{{ url_for('pages.addToDiary') }}" method="POST">
+        {% if nutrition_info %}
+            <input type="hidden" name="name" value="{{ nutrition_info.name }}">
+            <input type="hidden" name="carbs" value="{{ nutrition_info.carbohydrates }}">
+            <input type="hidden" name="fat" value="{{ nutrition_info.fat }}">
+            <input type="hidden" name="protein" value="{{ nutrition_info.protein }}">
+            <input type="hidden" name="calories" value="{{ nutrition_info.energy }}">
+            <button type="submit" class="btn btn-warning m-3">Add to Diary</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

@@ -1,2 +1,24 @@
 {% extends "layout.html" %}
 {% block title %}Targets{% endblock %}
+{% block page %} 
+<h1 id="food_search">Daily Nutrition Targets</h1>
+<form method="POST" action="/targets" class="container">
+    <div class="mb-3">
+      <label for="calories" class="form-label">Target Calories</label>
+      <input type="number" class="form-control opacity-50" id="calories" name="calories" placeholder="Calories">
+    </div>
+    <div class="mb-3">
+      <label for="protein" class="form-label">Target Protein (g)</label>
+      <input type="number" class="form-control opacity-50" id="protein" name="protein" placeholder="Protein">
+    </div>
+    <div class="mb-3">
+      <label for="carbohydrates" class="form-label">Target Carbohydrates (g)</label>
+      <input type="number" class="form-control opacity-50" id="carbohydrates" name="carbohydrates" placeholder="Carbohydrates" min="0">
+    </div>
+    <div class="mb-3">
+      <label for="fat" class="form-label">Target Fat (g)</label>
+      <input type="number" class="form-control opacity-50" id="fat" name="fat" placeholder="Fat">
+    </div>
+    <button type="submit" class="btn btn-warning" id="target_submit">Submit</button>
+  </form>
+{% endblock %}

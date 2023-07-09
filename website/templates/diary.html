@@ -1,2 +1,86 @@
 {% extends "layout.html" %}
 {% block title %}Diary{% endblock %}
+{% block page %}
+<div class="container">
+    <h1>Diary</h1>
+    <h2>Daily Targets</h2>
+    <table id="target-table" class="table table-bordered opacity-50">
+        <thead>
+            <tr>
+                <th>Energy (kcal)</th>
+                <th>Fat (grams)</th>
+                <th>Protein (grams)</th>
+                <th>Carbohydrate (grams)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if current_user.calories is defined %}
+                <tr>
+                    <td>{{ current_user.calories }}</td>
+                    <td>{{ current_user.fats }}</td>
+                    <td>{{ current_user.protein }}</td>
+                    <td>{{ current_user.carbohydrates }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>No target defined</td>
+                    <td>No target defined</td>
+                    <td>No target defined</td>
+                    <td>No target defined</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <h2 class="mt-4">View Food Log</h2>
+    <form id="date-form" method="POST" action="{{ url_for('pages.foodLog') }}" class="opacity-50 d-flex justify-content-center">
+        <div class="form-group row">
+            <div class="col-md-8">
+                <input id="date-input" name="date" type="date" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-warning">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    {% if foods %}
+    <h2 class="mt-4">Foods Consumed on {{ formatted_date }}</h2>
+    <table class="table table-bordered opacity-50">
+        <thead>
+            <tr>
+                <th>Food</th>
+                <th>Calories</th>
+                <th>Fat (grams)</th>
+                <th>Protein (grams)</th>
+                <th>Carbohydrates (grams)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for food in foods %}
+            <tr>
+                <td>{{ food.name }}</td>
+                <td>{{ food.calories }}</td>
+                <td>{{ food.fat }}</td>
+                <td>{{ food.protein }}</td>
+                <td>{{ food.carbs }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>{{ total_calories }}</strong></td>
+                <td><strong>{{ total_fat }}</strong></td>
+                <td><strong>{{ total_protein }}</strong></td>
+                <td><strong>{{ total_carbs }}</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Deviation</strong></td>
+                <td><strong>{% if total_calories > current_user.calories %}+{% endif %}{{ "%.2f" % (total_calories - current_user.calories) }}</strong></td>
+                <td><strong>{% if total_fat > current_user.fats %}+{% endif %}{{ "%.2f" % (total_fat - current_user.fats) }}</strong></td>
+                <td><strong>{% if total_protein > current_user.protein %}+{% endif %}{{ "%.2f" % (total_protein - current_user.protein) }}</strong></td>
+                <td><strong>{% if total_carbs > current_user.carbohydrates %}+{% endif %}{{ "%.2f" % (total_carbs - current_user.carbohydrates) }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+  </div>
+{% endblock %}
